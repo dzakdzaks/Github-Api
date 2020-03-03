@@ -1,0 +1,94 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply from:'../dependencies_version.gradle'
+
+android {
+    compileSdkVersion versions.compileSdk
+    buildToolsVersion versions.buildToolsVersion
+
+    defaultConfig {
+        applicationId "com.dzakdzaks.github_api"
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.compileSdk
+        versionCode versions.versionCode
+        versionName versions.versionName
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    // junit junit
+    testImplementation "junit:junit:$versions.junitVersion"
+
+    // androidx test
+    androidTestImplementation "androidx.test:runner:$versions.androidxTest"
+
+    // kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin"
+    implementation "androidx.core:core-ktx:$versions.core_ktx"
+
+    // appcompat
+    implementation "androidx.appcompat:appcompat:$versions.appcompat"
+
+    // constraint layout
+    implementation "androidx.constraintlayout:constraintlayout:$versions.constraint_layout"
+
+    // google material
+    api "com.google.android.material:material:$versions.materialVersion"
+
+    // glide for images
+    implementation "com.github.bumptech.glide:glide:$versions.glideVersion"
+    implementation "com.github.florent37:glidepalette:$versions.glidePaletteVersion"
+    kapt "com.github.bumptech.glide:compiler:$versions.glideVersion"
+
+    // networking
+    api "com.squareup.retrofit2:retrofit:$versions.retrofitVersion"
+    api "com.squareup.okhttp3:logging-interceptor:$versions.okhttpVersion"
+
+    // gson converter
+    api "com.squareup.retrofit2:converter-gson:$versions.retrofitVersion"
+
+    // debugging
+    implementation "com.jakewharton.timber:timber:$versions.timberVersion"
+
+    // recycler view
+    implementation "androidx.recyclerview:recyclerview:$versions.recyclerView"
+
+    // recycling libs
+    implementation "com.utsman.recycling:recycling:$versions.recycling"
+
+    // dependency injection
+    implementation "com.google.dagger:dagger:$versions.daggerVersion"
+    implementation "com.google.dagger:dagger-android:$versions.daggerVersion"
+    implementation "com.google.dagger:dagger-android-support:$versions.daggerVersion"
+    kapt "com.google.dagger:dagger-compiler:$versions.daggerVersion"
+    kapt "com.google.dagger:dagger-android-processor:$versions.daggerVersion"
+
+    // architecture components
+    implementation "androidx.activity:activity-ktx:$versions.activityKtxVersion"
+    implementation "androidx.lifecycle:lifecycle-extensions:$versions.lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$versions.lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$versions.lifecycleVersion"
+}
