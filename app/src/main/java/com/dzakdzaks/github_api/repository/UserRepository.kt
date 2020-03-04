@@ -31,7 +31,7 @@ class UserRepository @Inject constructor(
         Timber.d("Inject UserRepository")
     }
 
-    private var url: String = ""
+    var url: String = ""
 
     fun searchUsers(
         query: String,
@@ -64,48 +64,51 @@ class UserRepository @Inject constructor(
 
     fun fetchUsers(error: (String) -> Unit): MutableLiveData<List<Users>> {
         val listUsers = MutableLiveData<List<Users>>()
-//        if (url == "") {
-        this.networkState.postValue(NetworkState.LOADING)
-        userClient.fetchUserResult { response ->
-            this.networkState.postValue(NetworkState.LOADED)
-            when (response) {
-                is ApiResponse.Success -> {
-                    response.data?.let {
-                        listUsers.postValue(it)
-                        url = response.url.toString()
+        if (url == "") {
+            this.networkState.postValue(NetworkState.LOADING)
+            userClient.fetchUserResult { response ->
+                this.networkState.postValue(NetworkState.LOADED)
+                when (response) {
+                    is ApiResponse.Success -> {
+                        response.data?.let {
+                            listUsers.postValue(it)
+                            url = response.url.toString()
+                            Timber.d("wakwaw: $url")
+                        }
+                    }
+                    is ApiResponse.Failure.Error -> {
+                        error(response.message())
+                        networkState.postValue(NetworkState.error(response.message()))
+                    }
+                    is ApiResponse.Failure.Exception -> {
+                        error(response.message())
+                        networkState.postValue(NetworkState.error(response.message()))
                     }
                 }
-                is ApiResponse.Failure.Error -> {
-                    error(response.message())
-                    networkState.postValue(NetworkState.error(response.message()))
-                }
-                is ApiResponse.Failure.Exception -> {
-                    error(response.message())
-                    networkState.postValue(NetworkState.error(response.message()))
+            }
+        } else {
+            this.networkState.postValue(NetworkState.LOADING)
+            userClient.fetchUserResultPaginate(url) { response ->
+                this.networkState.postValue(NetworkState.LOADED)
+                when (response) {
+                    is ApiResponse.Success -> {
+                        response.data?.let {
+                            listUsers.postValue(it)
+                            url = response.url.toString()
+                            Timber.d("wakwaw: $url")
+                        }
+                    }
+                    is ApiResponse.Failure.Error -> {
+                        error(response.message())
+                        networkState.postValue(NetworkState.error(response.message()))
+                    }
+                    is ApiResponse.Failure.Exception -> {
+                        error(response.message())
+                        networkState.postValue(NetworkState.error(response.message()))
+                    }
                 }
             }
         }
-//        } else {
-//            Timber.d("wakwaw: $url")
-//            userClient.fetchUserResultPaginate(url) { response ->
-//                when (response) {
-//                    is ApiResponse.Success -> {
-//                        response.data?.let {
-//                            listUsers.postValue(it)
-//                            url = response.url.toString()
-//                        }
-//                    }
-//                    is ApiResponse.Failure.Error -> {
-//                        error(response.message())
-//                        networkState.postValue(NetworkState.error(response.message()))
-//                    }
-//                    is ApiResponse.Failure.Exception -> {
-//                        error(response.message())
-//                        networkState.postValue(NetworkState.error(response.message()))
-//                    }
-//                }
-//            }
-//        }
         return listUsers
     }
 }

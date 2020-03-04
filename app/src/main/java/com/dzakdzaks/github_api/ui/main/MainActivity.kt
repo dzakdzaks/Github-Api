@@ -138,19 +138,27 @@ class MainActivity : ViewModelActivity(), SearchView.OnQueryTextListener {
         searchView = searchItem?.actionView as SearchView
         searchView.queryHint = "Search People"
         searchView.setOnQueryTextListener(this)
-        searchView.isIconified = false
+        searchView.isIconified = true
         searchView.maxWidth = Int.MAX_VALUE
 
         return true
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
-        setupRecyclerSearch(query)
+        if (query != "") {
+            setupRecyclerSearch(query)
+        } else {
+            setupRecyclerFetch()
+        }
         return false
     }
 
     override fun onQueryTextChange(newText: String?): Boolean {
-        setupRecyclerSearch(newText)
+        if (newText != "") {
+            setupRecyclerSearch(newText)
+        } else {
+            setupRecyclerFetch()
+        }
         return false
     }
 

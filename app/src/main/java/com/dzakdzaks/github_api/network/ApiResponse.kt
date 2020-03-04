@@ -1,5 +1,6 @@
 package com.dzakdzaks.github_api.network
 
+import com.dzakdzaks.github_api.common.sinceUsersCreator
 import okhttp3.ResponseBody
 import retrofit2.Response
 
@@ -22,7 +23,7 @@ sealed class ApiResponse<out ResponseClass> {
      */
     class Success<ResponseClass>(response: Response<ResponseClass>) : ApiResponse<ResponseClass>() {
         val data: ResponseClass? = response.body()
-        val url: String? = response.headers()["Link"]
+        val url: String? = sinceUsersCreator(response.headers()["Link"]!!)
         override fun toString(): String = "[ApiResponse.Success]: $data"
     }
 

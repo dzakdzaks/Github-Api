@@ -32,6 +32,7 @@ class MainActivityViewModel @Inject constructor(
     fun networkState(): LiveData<NetworkState> = userRepository.networkState
 
     fun searchUsers(query: String, page: Int, perPage: Int): LiveData<List<Users>> {
+        userRepository.url = ""
         var list = MutableLiveData<List<Users>>()
         if (query != "") {
             list = userRepository.searchUsers(query, page, perPage) { msg ->
