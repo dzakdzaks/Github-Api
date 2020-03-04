@@ -3,7 +3,7 @@ package com.dzakdzaks.github_api.entity.response
 import com.dzakdzaks.github_api.entity.entities.Users
 import com.google.gson.annotations.SerializedName
 
-data class SearchUsersResponse(
+data class UsersResponse(
 
     @field:SerializedName("total_count")
     val totalCount: Int? = null,

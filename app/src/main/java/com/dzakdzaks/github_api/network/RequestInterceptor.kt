@@ -30,7 +30,7 @@ class RequestInterceptor : Interceptor {
 
         /*HEADER PARAMETER*/
         val builder = chain.request().newBuilder()
-        builder.addHeader("Authorization", "token d9caa0c075df7163b6cbb0279e5e822b504ff849")
+        builder.addHeader("Authorization", "token 1525921cfea331c192c835768d1939a170efdc2e")
         return chain.proceed(builder.build())
     }
 

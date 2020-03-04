@@ -1,10 +1,11 @@
-package com.dzakdzaks.github_api.ui
+package com.dzakdzaks.github_api.ui.main
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.dzakdzaks.github_api.entity.entities.Users
 import com.dzakdzaks.github_api.repository.UserRepository
+import com.utsman.recycling.extentions.NetworkState
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -22,27 +23,26 @@ class MainActivityViewModel @Inject constructor(
     private val userRepository: UserRepository
 ) : ViewModel() {
 
-//    private var querySearch: MutableLiveData<String> = MutableLiveData()
-//    var userList: LiveData<List<Users>>
-
     val message: MutableLiveData<String> = MutableLiveData()
 
     init {
         Timber.d("injection MainActivityViewModel")
-
-//        this.userList = querySearch.switchMap { querySearch ->
-//            userRepository.searchUsers(querySearch) {message.postValue(it)}
-//        }
     }
 
-    fun searchUsers(query: String): LiveData<List<Users>> {
+    fun networkState(): LiveData<NetworkState> = userRepository.networkState
+
+    fun searchUsers(query: String, page: Int, perPage: Int): LiveData<List<Users>> {
         var list = MutableLiveData<List<Users>>()
         if (query != "") {
-            list = userRepository.searchUsers(query) { message.postValue(it) }
+            list = userRepository.searchUsers(query, page, perPage) { msg ->
+                message.postValue(msg)
+            }
         }
         return list
     }
 
-    fun isLoading(): LiveData<Boolean> = userRepository.isLoading
+    fun fetchUsers(): LiveData<List<Users>> {
+        return userRepository.fetchUsers { message.postValue(it) }
+    }
 
 }

@@ -1,6 +1,7 @@
 package com.dzakdzaks.github_api.repository
 
 import androidx.lifecycle.MutableLiveData
+import com.utsman.recycling.extentions.NetworkState
 
 /**
  * ==================================//==================================
@@ -12,5 +13,5 @@ import androidx.lifecycle.MutableLiveData
  * ==================================//==================================
  */
 interface Repository {
-    var isLoading: MutableLiveData<Boolean>
+    var networkState: MutableLiveData<NetworkState>
 }

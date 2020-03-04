@@ -22,6 +22,7 @@ sealed class ApiResponse<out ResponseClass> {
      */
     class Success<ResponseClass>(response: Response<ResponseClass>) : ApiResponse<ResponseClass>() {
         val data: ResponseClass? = response.body()
+        val url: String? = response.headers()["Link"]
         override fun toString(): String = "[ApiResponse.Success]: $data"
     }
 

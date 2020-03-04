@@ -1,7 +1,8 @@
 package com.dzakdzaks.github_api.di
 
 import com.dzakdzaks.github_api.di.annotations.ActivityScope
-import com.dzakdzaks.github_api.ui.MainActivity
+import com.dzakdzaks.github_api.ui.main.MainActivity
+import com.dzakdzaks.github_api.ui.user_detail.UserDetailActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -20,4 +21,8 @@ abstract class ActivityModule {
     @ActivityScope
     @ContributesAndroidInjector
     internal abstract fun contributeMainActivity(): MainActivity
+
+    @ActivityScope
+    @ContributesAndroidInjector
+    internal abstract fun contributeUserDetailActivity(): UserDetailActivity
 }

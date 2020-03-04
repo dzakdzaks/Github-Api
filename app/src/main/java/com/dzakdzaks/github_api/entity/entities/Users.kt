@@ -1,6 +1,7 @@
 package com.dzakdzaks.github_api.entity.entities
 
 import android.os.Parcelable
+import com.dzakdzaks.github_api.entity.response.NetworkResponse
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
@@ -63,4 +64,4 @@ data class Users(
 
     @field:SerializedName("organizations_url")
     val organizationsUrl: String? = null
-) : Parcelable
+) : Parcelable, NetworkResponse
