@@ -25,7 +25,7 @@ class NetworkChangesReceiver constructor(private val networkChangesCallback: Net
         networkChangesCallback.onNetworkChanged(isOnline())
     }
 
-    fun isOnline(): Boolean {
+    private fun isOnline(): Boolean {
         var result = false
         val connectivityManager: ConnectivityManager =
             MyApp.appContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
