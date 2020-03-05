@@ -1,5 +1,6 @@
 package com.dzakdzaks.github_api
 
+import android.content.Context
 import com.dzakdzaks.github_api.di.DaggerAppComponent
 import dagger.android.DaggerApplication
 import timber.log.Timber
@@ -17,6 +18,18 @@ import timber.log.Timber
 class MyApp : DaggerApplication() {
 
     private val appComponent = DaggerAppComponent.factory().create(this)
+
+    init {
+        instance = this
+    }
+
+    companion object {
+        private var instance: MyApp? = null
+
+        fun appContext(): Context {
+            return instance!!.applicationContext
+        }
+    }
 
     override fun onCreate() {
         super.onCreate()

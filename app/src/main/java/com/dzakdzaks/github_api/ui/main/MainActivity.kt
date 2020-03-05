@@ -1,8 +1,11 @@
 package com.dzakdzaks.github_api.ui.main
 
 import android.content.Intent
+import android.content.IntentFilter
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.view.Menu
+import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.observe
@@ -11,28 +14,45 @@ import com.bumptech.glide.request.RequestOptions
 import com.dzakdzaks.github_api.R
 import com.dzakdzaks.github_api.base.ViewModelActivity
 import com.dzakdzaks.github_api.common.GlideApp
-import com.dzakdzaks.github_api.common.toast
+import com.dzakdzaks.github_api.common.NetworkChangesReceiver
 import com.dzakdzaks.github_api.entity.entities.Users
 import com.dzakdzaks.github_api.ui.user_detail.UserDetailActivity
+import com.google.android.material.snackbar.Snackbar
 import com.utsman.recycling.extentions.Recycling
 import com.utsman.recycling.setupAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.item_users.view.*
 
 
-class MainActivity : ViewModelActivity(), SearchView.OnQueryTextListener {
+class MainActivity : ViewModelActivity(), SearchView.OnQueryTextListener,
+    NetworkChangesReceiver.NetworkChangesCallback {
 
     private val viewModel: MainActivityViewModel by injectViewModels()
     private lateinit var searchView: SearchView
+    private val networkChangesReceiver = NetworkChangesReceiver(this)
+    private var q = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setupRecyclerFetch()
-        observeMessage()
+        observeMessageSearch()
+        observeMessageFetch()
     }
 
-    private fun observeMessage() = this.viewModel.message.observe(this) { toast(it) }
+    private fun observeMessageSearch() = this.viewModel.messageSearch.observe(this) {
+        Snackbar.make(parentMain, it, Snackbar.LENGTH_INDEFINITE)
+            .setAction("Retry", View.OnClickListener {
+                setupRecyclerSearch(q)
+            }).show()
+    }
+
+    private fun observeMessageFetch() = this.viewModel.messageFetch.observe(this) {
+        Snackbar.make(parentMain, it, Snackbar.LENGTH_INDEFINITE)
+            .setAction("Retry", View.OnClickListener {
+                setupRecyclerFetch()
+            }).show()
+    }
 
     private fun setupRecyclerSearch(q: String?) {
         list.setupAdapter<Users>(R.layout.item_users) { adapter, context, list ->
@@ -145,6 +165,7 @@ class MainActivity : ViewModelActivity(), SearchView.OnQueryTextListener {
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
+        this.q = query!!
         if (query != "") {
             setupRecyclerSearch(query)
         } else {
@@ -154,6 +175,7 @@ class MainActivity : ViewModelActivity(), SearchView.OnQueryTextListener {
     }
 
     override fun onQueryTextChange(newText: String?): Boolean {
+        this.q = newText!!
         if (newText != "") {
             setupRecyclerSearch(newText)
         } else {
@@ -162,11 +184,32 @@ class MainActivity : ViewModelActivity(), SearchView.OnQueryTextListener {
         return false
     }
 
+    override fun onNetworkChanged(isOnline: Boolean) {
+        if (!isOnline) {
+            Snackbar.make(
+                parentMain,
+                "No Internet Connection\nPlease Check Your Internet Connection",
+                Snackbar.LENGTH_LONG
+            ).show()
+        }
+    }
+
     override fun onBackPressed() {
         if (!searchView.isIconified) {
             searchView.isIconified = true
         } else {
             super.onBackPressed()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val intentFilter: IntentFilter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+        registerReceiver(networkChangesReceiver, intentFilter)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        unregisterReceiver(networkChangesReceiver)
     }
 }
