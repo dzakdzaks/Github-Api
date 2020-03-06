@@ -5,7 +5,6 @@ import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.view.Menu
-import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.observe
@@ -15,9 +14,9 @@ import com.dzakdzaks.github_api.R
 import com.dzakdzaks.github_api.base.ViewModelActivity
 import com.dzakdzaks.github_api.common.GlideApp
 import com.dzakdzaks.github_api.common.NetworkChangesReceiver
+import com.dzakdzaks.github_api.common.toast
 import com.dzakdzaks.github_api.entity.entities.Users
 import com.dzakdzaks.github_api.ui.user_detail.UserDetailActivity
-import com.google.android.material.snackbar.Snackbar
 import com.utsman.recycling.extentions.Recycling
 import com.utsman.recycling.setupAdapter
 import kotlinx.android.synthetic.main.activity_main.*
@@ -41,17 +40,11 @@ class MainActivity : ViewModelActivity(), SearchView.OnQueryTextListener,
     }
 
     private fun observeMessageSearch() = this.viewModel.messageSearch.observe(this) {
-        Snackbar.make(parentMain, it, Snackbar.LENGTH_INDEFINITE)
-            .setAction("Retry", View.OnClickListener {
-                setupRecyclerSearch(q)
-            }).show()
+
     }
 
     private fun observeMessageFetch() = this.viewModel.messageFetch.observe(this) {
-        Snackbar.make(parentMain, it, Snackbar.LENGTH_INDEFINITE)
-            .setAction("Retry", View.OnClickListener {
-                setupRecyclerFetch()
-            }).show()
+
     }
 
     private fun setupRecyclerSearch(q: String?) {
@@ -185,13 +178,8 @@ class MainActivity : ViewModelActivity(), SearchView.OnQueryTextListener,
     }
 
     override fun onNetworkChanged(isOnline: Boolean) {
-        if (!isOnline) {
-            Snackbar.make(
-                parentMain,
-                "No Internet Connection\nPlease Check Your Internet Connection",
-                Snackbar.LENGTH_LONG
-            ).show()
-        }
+        if (!isOnline)
+            toast("No Internet Connection")
     }
 
     override fun onBackPressed() {
