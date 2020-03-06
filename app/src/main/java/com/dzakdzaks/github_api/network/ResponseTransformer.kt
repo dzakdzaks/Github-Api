@@ -29,7 +29,7 @@ fun <T> Call<T>.transform(onResult: (response: ApiResponse<T>) -> Unit) {
 
 /** gets the [ApiResponse.Failure.Error] message with a error code. */
 fun <ResponseClass> ApiResponse.Failure.Error<ResponseClass>.message() =
-    "$code: ${responseBody?.string()}"
+    "Error $code: ${responseBody?.string()}"
 
 /** gets the [ApiResponse.Failure.Exception] message. */
-fun <ResponseClass> ApiResponse.Failure.Exception<ResponseClass>.message() = "$message"
+fun <ResponseClass> ApiResponse.Failure.Exception<ResponseClass>.message() = "Exception: $message"

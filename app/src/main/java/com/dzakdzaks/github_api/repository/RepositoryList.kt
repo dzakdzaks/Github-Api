@@ -1,16 +1,17 @@
 package com.dzakdzaks.github_api.repository
 
 import androidx.lifecycle.MutableLiveData
+import com.utsman.recycling.extentions.NetworkState
 
 /**
  * ==================================//==================================
  * ==================================//==================================
- * Created on Friday, 06 March 2020 at 14:35.
+ * Created on Tuesday, 03 March 2020 at 16:08.
  * Project Name => Github_API
  * Package Name => com.dzakdzaks.github_api.repository
  * ==================================//==================================
  * ==================================//==================================
  */
-interface Repository {
-    var isLoading: MutableLiveData<Boolean>
+interface RepositoryList {
+    var networkState: MutableLiveData<NetworkState>
 }

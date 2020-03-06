@@ -35,16 +35,11 @@ class MainActivity : ViewModelActivity(), SearchView.OnQueryTextListener,
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setupRecyclerFetch()
-        observeMessageSearch()
-        observeMessageFetch()
+        observeMessage()
     }
 
-    private fun observeMessageSearch() = this.viewModel.messageSearch.observe(this) {
-
-    }
-
-    private fun observeMessageFetch() = this.viewModel.messageFetch.observe(this) {
-
+    private fun observeMessage() = this.viewModel.message.observe(this) {
+        toast(it)
     }
 
     private fun setupRecyclerSearch(q: String?) {
@@ -64,7 +59,7 @@ class MainActivity : ViewModelActivity(), SearchView.OnQueryTextListener,
                     .into(itemView.imageProfile)
                 itemView.parentLayout.setOnClickListener {
                     val intent = Intent(Intent(this@MainActivity, UserDetailActivity::class.java))
-                    intent.putExtra("user", item)
+                    intent.putExtra("username", item?.login)
                     startActivity(intent)
                 }
             }
@@ -112,7 +107,7 @@ class MainActivity : ViewModelActivity(), SearchView.OnQueryTextListener,
                     .into(itemView.imageProfile)
                 itemView.parentLayout.setOnClickListener {
                     val intent = Intent(Intent(this@MainActivity, UserDetailActivity::class.java))
-                    intent.putExtra("user", item)
+                    intent.putExtra("username", item?.login)
                     startActivity(intent)
                 }
             }

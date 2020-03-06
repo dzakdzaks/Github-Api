@@ -23,7 +23,7 @@ import javax.inject.Singleton
 @Singleton
 class UserRepository @Inject constructor(
     private val userClient: UserClient
-) : Repository {
+) : RepositoryList {
 
     override var networkState: MutableLiveData<NetworkState> = MutableLiveData()
 

@@ -1,7 +1,6 @@
 package com.dzakdzaks.github_api.di
 
 import com.dzakdzaks.github_api.base.ViewModelActivity
-import com.dzakdzaks.github_api.ui.user_detail.UserDetailViewModel
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -19,7 +18,4 @@ import dagger.android.ContributesAndroidInjector
 abstract class BaseModule {
     @ContributesAndroidInjector
     internal abstract fun contributeViewModelActivity(): ViewModelActivity
-
-    @ContributesAndroidInjector
-    internal abstract fun contributeViewModelUserDetail(): UserDetailViewModel
 }

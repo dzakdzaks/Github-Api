@@ -3,6 +3,8 @@ package com.dzakdzaks.github_api.di
 import com.dzakdzaks.github_api.network.Endpoint
 import com.dzakdzaks.github_api.network.RequestInterceptor
 import com.dzakdzaks.github_api.network.client.UserClient
+import com.dzakdzaks.github_api.network.client.UserDetailClient
+import com.dzakdzaks.github_api.network.service.UserDetailService
 import com.dzakdzaks.github_api.network.service.UserService
 import dagger.Module
 import dagger.Provides
@@ -53,5 +55,17 @@ class NetworkModule {
     @Singleton
     fun provideUserClient(userService: UserService): UserClient {
         return UserClient(userService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserDetailService(retrofit: Retrofit): UserDetailService {
+        return retrofit.create(UserDetailService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserDetailClient(userDetailService: UserDetailService): UserDetailClient {
+        return UserDetailClient(userDetailService)
     }
 }

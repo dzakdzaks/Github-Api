@@ -1,6 +1,5 @@
 package com.dzakdzaks.github_api.network
 
-import com.dzakdzaks.github_api.common.sinceUsersCreator
 import okhttp3.ResponseBody
 import retrofit2.Response
 
@@ -23,7 +22,10 @@ sealed class ApiResponse<out ResponseClass> {
      */
     class Success<ResponseClass>(response: Response<ResponseClass>) : ApiResponse<ResponseClass>() {
         val data: ResponseClass? = response.body()
-        val url: String? = sinceUsersCreator(response.headers()["Link"]!!)
+        //        val url: String? = sinceUsersCreator(response.headers()["Link"]!!)
+        val url: String? =
+            if (response.headers()["Link"] != null) response.headers()["Link"] else ""
+
         override fun toString(): String = "[ApiResponse.Success]: $data"
     }
 
@@ -45,12 +47,12 @@ sealed class ApiResponse<out ResponseClass> {
             val responseBody: ResponseBody? = response.errorBody()?.apply { close() }
             val code: Int = response.code()
             override fun toString(): String =
-                "[ApiResponse.Failure $code]: ${responseBody?.string()}"
+                "[ApiResponse.Failure.Error $code]: ${responseBody?.string()}"
         }
 
         class Exception<out ResponseClass>(exception: Throwable) : ApiResponse<ResponseClass>() {
-            val message: String? = exception.localizedMessage
-            override fun toString(): String = "[ApiResponse.Failure]: $message"
+            val message: String? = exception.message
+            override fun toString(): String = "[ApiResponse.Failure.Exception]: $message"
         }
     }
 

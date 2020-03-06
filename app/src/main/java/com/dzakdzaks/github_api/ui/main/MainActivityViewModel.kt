@@ -23,8 +23,7 @@ class MainActivityViewModel @Inject constructor(
     private val userRepository: UserRepository
 ) : ViewModel() {
 
-    val messageSearch: MutableLiveData<String> = MutableLiveData()
-    val messageFetch: MutableLiveData<String> = MutableLiveData()
+    val message: MutableLiveData<String> = MutableLiveData()
 
     init {
         Timber.d("injection MainActivityViewModel")
@@ -37,14 +36,14 @@ class MainActivityViewModel @Inject constructor(
         var list = MutableLiveData<List<Users>>()
         if (query != "") {
             list = userRepository.searchUsers(query, page, perPage) { msg ->
-                messageSearch.postValue(msg)
+                message.postValue(msg)
             }
         }
         return list
     }
 
     fun fetchUsers(): LiveData<List<Users>> {
-        return userRepository.fetchUsers { messageFetch.postValue(it) }
+        return userRepository.fetchUsers { message.postValue(it) }
     }
 
 }
